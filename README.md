@@ -55,3 +55,22 @@ Pushing the container changes to docker respository.
 ```
 sudo docker push vinaypandella/transactions
 ```
+
+After uploading the transactions service container to docker repository you can deploy this container anywhere you want.
+
+In this example to just show how this can be used in the production environment i just created a Virtual Machine which would use the docker instance from the docker hub and confiugre the propertied with respect to production using Ansible.
+
+Stop the running dev Virtual Machine if it is already running.
+
+```
+vagrant halt dev
+```
+
+Spinning up the Prod Virtual Machine.
+
+```
+vagrant up prod
+```
+
+
+
