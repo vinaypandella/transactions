@@ -90,5 +90,11 @@ GET the transactions and verify if the above are inserted
 curl -H 'Content-Type: application/json' http://localhost:8080/api/v1/transactions
 ```
 
+You can delete using the following.
+
+```
+curl -H 'Content-Type: application/json' -X DELETE http://localhost:8080/api/v1/transactions/_id/2
+```
+
 You can play around with some other REST operations..
 
