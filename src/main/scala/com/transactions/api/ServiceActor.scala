@@ -1,4 +1,4 @@
-package com.technologyconversations.api
+package com.transactions.api
 
 import akka.actor.Actor
 import spray.json.DefaultJsonProtocol

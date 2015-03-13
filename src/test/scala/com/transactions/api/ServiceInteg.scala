@@ -1,4 +1,4 @@
-package com.technologyconversations.api
+package com.transactions.api
 
 import org.specs2.mutable.Specification
 import scalaj.http._

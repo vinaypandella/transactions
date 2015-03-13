@@ -1,4 +1,4 @@
-package com.technologyconversations.api
+package com.transactions.api
 
 import com.mongodb.casbah.Imports._
 import com.mongodb.casbah.MongoClient
