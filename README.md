@@ -8,7 +8,10 @@ After cloning the repository in the source folder
 
 Execute the following to spin up the VM of transactions service in dev mode.
 
+```
 vagrant up dev
+
+```
 
 SSH in to the vagrant box using the following command.
 
