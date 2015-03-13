@@ -72,5 +72,23 @@ Spinning up the Prod Virtual Machine.
 vagrant up prod
 ```
 
+Once the Virtual Machine is up and running you can try invoke the service.
 
+POST some transactions using the following.
+
+```
+curl -H 'Content-Type: application/json' -X PUT -d '{"_id": 1, "transactionType": "SALE", "transactionDetails": "TransactionDetails1", "total":99.99}' http://localhost:8080/api/v1/transactions
+
+curl -H 'Content-Type: application/json' -X PUT -d '{"_id": 2, "transactionType": "RETURN", "transactionDetails": "TransactionDetails1", "total":99.99}' http://localhost:8080/api/v1/transactions
+
+curl -H 'Content-Type: application/json' -X PUT -d '{"_id": 3, "transactionType": "SALE", "transactionDetails": "TransactionDetails1", "total":99.99}' http://localhost:8080/api/v1/transactions
+```
+
+GET the transactions and verify if the above are inserted
+
+```
+curl -H 'Content-Type: application/json' http://localhost:8080/api/v1/transactions
+```
+
+You can play around with some other REST operations..
 
