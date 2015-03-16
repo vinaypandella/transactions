@@ -1,6 +1,8 @@
-This repository consists of an example service which is developed using Scala , Akka and Spray framework and packaged using docker container.
+This repository consists of an example service which is developed using Scala , Akka and Spray framework and also details about specifics about packaging the service using docker container.
 
 You need to have Vagrant installed to run this service.
+
+
 
 Developer would do the following to get the service and make his changes.
 
