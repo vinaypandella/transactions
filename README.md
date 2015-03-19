@@ -16,29 +16,6 @@ cd transactions
 
 If you look at the vagrant file you will notice that we are using the ubuntu server for development.
 
-```
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.synced_folder ".", "/vagrant"
-  config.vm.provider "virtualbox" do |v|
-    v.memory = 2048
-  end
-  config.vm.provision "shell", path: "bootstrap.sh"
-  config.vm.define :dev do |dev|
-    dev.vm.provision :shell, inline: 'ansible-playbook /vagrant/ansible/dev.yml -c local'
-    dev.vm.hostname = "transactions-dev"
-  end
-  config.vm.define :prod do |prod|
-    prod.vm.network :forwarded_port, host: 8080, guest: 8080
-    prod.vm.provision :shell, inline: 'ansible-playbook /vagrant/ansible/prod.yml -c local'
-    prod.vm.hostname = "transactions-prod"
-  end
-  if Vagrant.has_plugin?("vagrant-cachier")
-    config.cache.scope = :box
-  end
-end
-
-```
 
 ```
 config.vm.box = "ubuntu/trusty64"
@@ -46,9 +23,6 @@ config.vm.box = "ubuntu/trusty64"
 
 The above code snippet in Vagrantfile  says the box (OS) to be Ubuntu.
 
-```
-config.vm.synced_folder ".", "/vagrant"
-```
 
 We can also specify the sync folder as /vagrant as mentioned below which means that everything in the current directory on the host will be avaiable as the /vagrant directory inside the VM.
 
@@ -56,13 +30,22 @@ We can also specify the sync folder as /vagrant as mentioned below which means t
 config.vm.synced_folder ".", "/vagrant"
 ```
 
-We are using the shell script to do the rest of the provisioning in this example we use bootstrap.sh which has the instructions to install the required software for developer environment using Ansible.
+As mentioned below we are using the shell script to do the rest of the provisioning. This example uses bootstrap.sh which has the instructions to install the Ansible.
 
-The rest of things we’ll need will be installed using Ansible so we’re provisioning our VM with it through the bootstrap.sh script. Finally, this Vagrantfile has two VMs defined: dev and prod. Each of them will run Ansible that will make sure that everything is installed properly.
+```
+  config.vm.provision "shell", path: "bootstrap.sh"
+```
 
-Preferable way to work with Ansible is to divide configurations into roles. In our case, there are four roles located in ansible/roles directory. One will make sure that Scala and SBT are installed, the other that Docker is up and running, and another one will run the MongoDB container. The last role (books) will be used later to deploy the service we’re building to the production VM.
+If look at the Vagrantfile you will see that it has two VMs defined dev and prod. Each of them will run Ansible that will install the required software based on the file which is selected either dev or prod.
 
+Best way to use Ansible for configurations is to divide the configurations in to roles.
+In our case we have four different roles located in ansible/roles directory.
+Role 1 : To install Scala and SBT 
+Role 2 : TO install Docker and it is up and running.
+Role3 : To Run the MongoDb container.
+Role4 : To install/deploy the transactions docker container is used only in production.
 
+Lets spin up the dev VM and build something.
 
 Execute the following to spin up the VM of transactions service in dev mode.
 
@@ -116,7 +99,7 @@ sudo docker push vinaypandella/transactions
 
 After uploading the transactions service container to docker repository you can deploy this container anywhere you want.
 
-In this example to just show how this can be used in the production environment i just created a Virtual Machine which would use the docker instance from the docker hub and confiugre the propertied with respect to production using Ansible.
+In this example to just show how this can be used in the production environment i just created a Virtual Machine which would use the docker instance from the docker hub and confiugre the properties with respect to production using Ansible.
 
 Stop the running dev Virtual Machine if it is already running.
 
