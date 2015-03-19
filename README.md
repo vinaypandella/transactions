@@ -1,4 +1,6 @@
-This repository consists of an example micro service which is developed using Scala , Akka and Spray framework and also details about specifics about packaging the service using docker container.
+This repository consists of an example micro service which is developed using Scala as a programming language, Akka as a messagin platform and Spray framework for REST API and also uses docker for packaging the service in to a container.
+
+You might need to have a basic understading about Scala, Akka, Spray and Docker and Ansible to play on this repository. It has few instructions to build the service, packaing the service and deploy the service as the container.
 
 Example uses vagrant for development and also in production environment to deploy the containers. It uses the Ansible as the configuration management tool.
 
@@ -15,7 +17,6 @@ cd transactions
 ```
 
 If you look at the vagrant file you will notice that we are using the ubuntu server for development.
-
 
 ```
 config.vm.box = "ubuntu/trusty64"
