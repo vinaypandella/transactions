@@ -1,12 +1,68 @@
-This repository consists of an example service which is developed using Scala , Akka and Spray framework and also details about specifics about packaging the service using docker container.
+This repository consists of an example micro service which is developed using Scala , Akka and Spray framework and also details about specifics about packaging the service using docker container.
+
+Example uses vagrant for development and also in production environment to deploy the containers. It uses the Ansible as the configuration management tool.
 
 You need to have Vagrant installed to run this service.
 
+Example is about REST service for transactions.
+
+Cloning the repo
+
+```
+git clone 
+
+cd transactions
+```
+
+If you look at the vagrant file you will notice that we are using the ubuntu server for development.
+
+```
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.synced_folder ".", "/vagrant"
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+  end
+  config.vm.provision "shell", path: "bootstrap.sh"
+  config.vm.define :dev do |dev|
+    dev.vm.provision :shell, inline: 'ansible-playbook /vagrant/ansible/dev.yml -c local'
+    dev.vm.hostname = "transactions-dev"
+  end
+  config.vm.define :prod do |prod|
+    prod.vm.network :forwarded_port, host: 8080, guest: 8080
+    prod.vm.provision :shell, inline: 'ansible-playbook /vagrant/ansible/prod.yml -c local'
+    prod.vm.hostname = "transactions-prod"
+  end
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
+end
+
+```
+
+```
+config.vm.box = "ubuntu/trusty64"
+```
+
+The above code snippet in Vagrantfile  says the box (OS) to be Ubuntu.
+
+```
+config.vm.synced_folder ".", "/vagrant"
+```
+
+We can also specify the sync folder as /vagrant as mentioned below which means that everything in the current directory on the host will be avaiable as the /vagrant directory inside the VM.
+
+```
+config.vm.synced_folder ".", "/vagrant"
+```
+
+We are using the shell script to do the rest of the provisioning in this example we use bootstrap.sh which has the instructions to install the required software for developer environment using Ansible.
+
+The rest of things we’ll need will be installed using Ansible so we’re provisioning our VM with it through the bootstrap.sh script. Finally, this Vagrantfile has two VMs defined: dev and prod. Each of them will run Ansible that will make sure that everything is installed properly.
+
+Preferable way to work with Ansible is to divide configurations into roles. In our case, there are four roles located in ansible/roles directory. One will make sure that Scala and SBT are installed, the other that Docker is up and running, and another one will run the MongoDB container. The last role (books) will be used later to deploy the service we’re building to the production VM.
 
 
-Developer would do the following to get the service and make his changes.
-
-After cloning the repository in the source folder
 
 Execute the following to spin up the VM of transactions service in dev mode.
 
