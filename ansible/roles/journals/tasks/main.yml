@@ -1,0 +1,13 @@
+- name: Directory is present
+  file:
+    path=/journaldata/db
+    state=directory
+  tags: [mongodb]
+
+- name: Container is running
+  docker:
+    name=journals
+    image=vinaypandella/journals
+    ports=9080:9080
+    volumes=/journaldata/db:/journaldata/db
+  tags: [mongodb]

@@ -1,6 +1,9 @@
 package com.transactions.api
 
-import akka.actor.Actor
+import akka.actor.{Props, ActorSystem, Actor}
+import akka.io.IO
+import spray.can.Http
+import spray.http.{HttpMethods, Uri, HttpRequest, HttpResponse}
 import spray.json.DefaultJsonProtocol
 import spray.routing.HttpService
 import spray.httpx.SprayJsonSupport._
@@ -8,12 +11,24 @@ import com.mongodb.casbah.Imports._
 import com.novus.salat._
 import com.novus.salat.global._
 import com.mongodb.casbah.MongoClient
+import scala.concurrent.Future
+import scala.util.{Success, Failure}
 import scala.util.Properties._
+import HttpMethods._
+import akka.pattern.ask
+import akka.util.Timeout
+
+
 
 case class TransactionReduced(_id: Int, transactionType: String, total: Double)
 case class Transaction(_id: Int, transactionType: String, transactionDetails: String, total: Double) {
   require(!transactionType.isEmpty)
   require(!transactionDetails.isEmpty)
+}
+
+case class Journal(_id: Int, journalType: String, journalDetails: String, total: Double) {
+  require(!journalType.isEmpty)
+  require(!journalDetails.isEmpty)
 }
 
 class ServiceActor extends Actor with ServiceRoute {
@@ -63,10 +78,16 @@ trait ServiceRoute extends HttpService with DefaultJsonProtocol {
             grater[Transaction].asDBObject(transaction),
             upsert = true
           )
+          val journalObject = new Journal(transaction._id, transaction.transactionType, transaction.transactionDetails, transaction.total)
+          implicit val system: ActorSystem = ActorSystem()
+          implicit val timeout: Timeout = Timeout(15)
+          import system.dispatcher
+          val response: Future[HttpResponse] =
+            (IO(Http) ? HttpRequest(GET, Uri("http://spray.io"))).mapTo[HttpResponse]
+          println("Response   "+response.toString());
           complete(transaction)
         }
       }
     }
   }
-
 }
