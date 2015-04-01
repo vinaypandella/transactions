@@ -1,4 +1,4 @@
-This repository consists of an example micro service which is developed using Scala as a programming language, Akka as a messagin platform and Spray framework for REST API and also uses docker for packaging the service in to a container.
+This repository consists of an example micro service which is developed using Scala as a programming language, Akka as a messaging platform and Spray framework for REST API and also uses docker for packaging the service in to a container.
 
 You might need to have a basic understading about Scala, Akka, Spray and Docker and Ansible to play on this repository. It has few instructions to build the service, packaing the service and deploy the service as the container.
 
@@ -6,7 +6,14 @@ Example uses vagrant for development and also in production environment to deplo
 
 You need to have Vagrant installed to run this service.
 
-Example is about REST service for transactions.
+Example is about REST service for transactions which would provide the REST operations to do CURD operations on transactions object as mentioned below
+
+{
+	"_id": 1,
+	"transactionType": "SALE",
+	"transactionDetails": "TransactionDetails1",
+	"total":99.99
+}
 
 Cloning the repo
 
@@ -37,15 +44,15 @@ As mentioned below we are using the shell script to do the rest of the provision
   config.vm.provision "shell", path: "bootstrap.sh"
 ```
 
-If look at the Vagrantfile you will see that it has two VMs defined dev and prod. Each of them will run Ansible that will install the required software based on the file which is selected either dev or prod.
+If you look at the Vagrantfile you will see that it has two VMs defined dev and prod. Each of them will run Ansible that will install the required software based on the file which is selected either dev or prod.
 
 Best way to use Ansible for configurations is to divide the configurations in to roles and define a playbook and run the ansible playbook for setup. 
 
 In our case we have four different roles located in ansible/roles directory.
-1 Role 1 -- To install Scala and SBT 
-2 Role 2 -- TO install Docker and it is up and running.
-3 Role 3 -- To Run the MongoDb container.
-4 Role 4 -- To install/deploy the transactions docker container is used only in production.
+* Role 1 -- To install Scala and SBT. 
+* Role 2 -- TO install Docker and it is up and running.
+* Role 3 -- To Run the MongoDb container.
+* Role 4 -- To install/deploy the transactions docker container is used only in production.
 
 we use dev and prod playbook for installing required software using roles mentioned in the tasks of the playbook.
 
