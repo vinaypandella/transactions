@@ -42,10 +42,10 @@ If look at the Vagrantfile you will see that it has two VMs defined dev and prod
 Best way to use Ansible for configurations is to divide the configurations in to roles and define a playbook and run the ansible playbook for setup. 
 
 In our case we have four different roles located in ansible/roles directory.
-1. Role 1 -- To install Scala and SBT 
-2. Role 2 -- TO install Docker and it is up and running.
-3. Role 3 -- To Run the MongoDb container.
-4. Role 4 -- To install/deploy the transactions docker container is used only in production.
+1 Role 1 -- To install Scala and SBT 
+2 Role 2 -- TO install Docker and it is up and running.
+3 Role 3 -- To Run the MongoDb container.
+4 Role 4 -- To install/deploy the transactions docker container is used only in production.
 
 we use dev and prod playbook for installing required software using roles mentioned in the tasks of the playbook.
 
