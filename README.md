@@ -18,7 +18,7 @@ Example is about REST service for transactions which would provide the REST oper
 Cloning the repo
 
 ```
-git clone 
+git clone https://github.com/vinaypandella/transactions.git
 
 cd transactions
 ```
